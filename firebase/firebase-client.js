@@ -24,7 +24,7 @@ class FirebaseClient {
   }
 
   // READ: Get a record by ID
-  async get(id) {
+  async getOne(id) {
     try {
       const ref = this.db.child(id); // Reference to a specific record
       const snapshot = await ref.once('value'); // Get the data
@@ -64,7 +64,7 @@ async delete(id){
   // DELETE: Delete a record by ID
 
   // LIST: Get all records in the collection
-  async list() {
+  async getAll() {
     try {
       const snapshot = await this.db.once('value'); // Get all records
       if (!snapshot.exists()) {
