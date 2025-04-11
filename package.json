@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/Rameez-khann/Gaylord-Spices-API#readme",
   "dependencies": {
+    "express": "^5.1.0",
     "firebase": "^11.6.0",
     "firebase-admin": "^13.2.0",
+    "http": "0.0.1-security",
+    "nodemon": "^3.1.9",
     "victor-dev-toolbox": "1.2.94-s"
   }
 }
