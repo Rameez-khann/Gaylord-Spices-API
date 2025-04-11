@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Rameez-khann/Gaylord-Spices-API#readme",
   "dependencies": {
     "firebase": "^11.6.0",
-    "firebase-admin": "^13.2.0"
+    "firebase-admin": "^13.2.0",
+    "victor-dev-toolbox": "1.2.94-s"
   }
 }
