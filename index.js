@@ -1,48 +1,65 @@
 const express = require('express');
+const serverless = require('serverless-http');
+const Search = require('./js/search');
+const cors = require('cors');
+const { Recipes } = require('./js/recipes');
+
 const app = express();
 
-app.use(express.json()); // Middleware to parse JSON request bodies
+// Apply CORS middleware before other middleware
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// Search for recipes (possibly by name or ingredient via query string)
-app.post('/recipes/search', (req, res) => {
-  const { query } = req.body; // e.g., { "query": "chicken" }
-  res.send(`Searching recipes for: ${query}`);
+app.use(express.json());
+
+const recipesClient = new Recipes();
+const search = new Search();
+
+app.post('/recipes/search', async (req, res) => {
+  const searchTerm = req.body?.searchTerm;
+  if (!searchTerm) return res.status(404).json({ message: "menu not found" });
+  const apiResults = await search.apiSearch(searchTerm);
+  res.status(200).json(apiResults);
 });
 
-// Get all recipes
-app.get('/recipes', (req, res) => {
-  res.send('Returning all recipes');
+app.get('/recipes', async (req, res) => {
+  const menuItems = await recipesClient.getAll();
+  res.json(menuItems);
 });
 
-// Get a single recipe by ID
-app.get('/recipes/:id', (req, res) => {
-  const { id } = req.params;
-  res.send(`Returning recipe with ID: ${id}`);
+app.get('/recipes/:id', async (req, res) => {
+  const item = await recipesClient.getOne(req.params.id);
+  if (!item) return res.status(404).json({ message: 'Item not found' });
+  res.json(item);
 });
 
-// Create a new recipe
-app.post('/recipes', (req, res) => {
-  const newRecipe = req.body;
-  res.send(`Created a new recipe: ${JSON.stringify(newRecipe)}`);
+app.post('/recipes', async (req, res) => {
+  const save = await recipesClient.create(req.body);
+  res.status(200).json(save);
 });
 
-// Update a recipe by ID
-app.put('/recipes/:id', (req, res) => {
-  const { id } = req.params;
-  const updatedData = req.body;
-  res.send(`Updated recipe ${id} with data: ${JSON.stringify(updatedData)}`);
+app.put('/recipes/:id', async (req, res) => {
+  const updated = await recipesClient.update(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ message: 'Item not found' });
+  res.json(updated);
 });
 
-// Delete a recipe by ID
-app.delete('/recipes/:id', (req, res) => {
-  const { id } = req.params;
-  res.send(`Deleted recipe with ID: ${id}`);
+app.delete('/recipes/:id', async (req, res) => {
+  const removed = await recipesClient.delete(req.params.id);
+  res.status(200).json(removed);
 });
 
-// Choose a port (e.g. 3000)
-const PORT = 3000;
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3030;
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
-});
+// For serverless deployment
+module.exports = app;
+module.exports.handler = serverless(app);
