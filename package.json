@@ -1,0 +1,21 @@
+{
+  "name": "gaylord-spices-api",
+  "version": "1.0.0",
+  "description": "Backend application for Gaylord Spices",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rameez-khann/Gaylord-Spices-API.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rameez-khann/Gaylord-Spices-API/issues"
+  },
+  "homepage": "https://github.com/Rameez-khann/Gaylord-Spices-API#readme",
+  "dependencies": {}
+}
