@@ -11,9 +11,10 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// Requests
 app.use(express.json());
-
 app.get('/', async (req, res) => {
+  res.status(200).send("HELLO")
 });
 
 
@@ -26,6 +27,7 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-// For serverless deployment
-module.exports = app;
-module.exports.handler = serverless(app);
+module.exports = {
+  app,
+  handler: serverless(app)
+};
