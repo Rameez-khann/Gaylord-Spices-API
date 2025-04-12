@@ -32,6 +32,17 @@ app.post('/recipes', async (req, res) => {
   res.status(200).json(save);
 });
 
+app.put('/recipes/:id', async (req, res) => {
+  const updated = await recipesClient.update(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ message: 'Item not found' });
+  res.json(updated);
+});
+
+app.delete('/recipes/:id', async (req, res) => {
+  const removed = await recipesClient.delete(req.params.id);
+  res.status(200).json(removed);
+});
+
 
 
 
