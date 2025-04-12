@@ -2,10 +2,12 @@ const express = require('express');
 const serverless = require('serverless-http');
 const cors = require('cors');
 const { Recipes } = require('./js/recipes');
+const { Search } = require('./js/search');
 
 const app = express();
 
 const recipesClient = new Recipes();
+const searchClient = new Search();
 
 // Apply CORS middleware before other middleware
 app.use(cors({
@@ -14,7 +16,17 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+app.use(express.json());
 // Requests
+
+app.post('/recipes/search', async (req, res) => {  
+  console.log(req.body);
+  const searchTerm = req.body?.searchTerm;
+  const recipes = await searchClient.findRecipes(searchTerm);
+  res.status(200).json(recipes);
+});
+
+
 app.use(express.json());
 app.get('/recipes', async (req, res) => {
   const recipes = await  recipesClient.getAll();
