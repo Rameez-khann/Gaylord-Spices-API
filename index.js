@@ -1,8 +1,11 @@
 const express = require('express');
 const serverless = require('serverless-http');
 const cors = require('cors');
+const { Recipes } = require('./js/recipes');
 
 const app = express();
+
+const recipesClient = new Recipes();
 
 // Apply CORS middleware before other middleware
 app.use(cors({
@@ -13,8 +16,9 @@ app.use(cors({
 
 // Requests
 app.use(express.json());
-app.get('/', async (req, res) => {
-  res.status(200).send("HELLO")
+app.get('/recipes', async (req, res) => {
+  const recipes = await  recipesClient.getAll();
+  res.status(200).send(recipes)
 });
 
 
