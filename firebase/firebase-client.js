@@ -1,6 +1,10 @@
 const { generateUniqueId, searchObjectsByFields, getFieldValuesFromArray } = require('victor-dev-toolbox');
 const { admin } = require('./firebase-config'); // Import Firebase Admin instance
 
+/**
+ * NOTE:
+ * Most of the code in this FirebaseClient class was provided by Firebase, and the victor-dev-toolbox npm package
+ */
 class FirebaseClient {
   constructor(collection) {
     // Firebase Realtime Database reference using the provided collection

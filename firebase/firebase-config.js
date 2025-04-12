@@ -1,5 +1,9 @@
-const admin = require('firebase-admin');
+/**
+ * NOTE:
+ * All code in this section was provided by Firebase, either through their official documentation or SDK-generated templates
+ */
 
+const admin = require('firebase-admin');
 // Firebase Configuration 
 const firebaseConfig = {
     apiKey: "AIzaSyDfNRk2LqHdPmKXW3lYgnBBWvy0haPWQQk",
