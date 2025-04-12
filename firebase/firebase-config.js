@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 
-
+// Firebase Configuration 
 const firebaseConfig = {
     apiKey: "AIzaSyDfNRk2LqHdPmKXW3lYgnBBWvy0haPWQQk",
     authDomain: "gaylord-spices-be80a.firebaseapp.com",
@@ -11,7 +11,7 @@ const firebaseConfig = {
     measurementId: "G-06WC2EJLCG"
   };
 
-
+//  Firebase Service Account
  const serviceAccount = {
     type: "service_account",
     project_id: "gaylord-spices-be80a",

@@ -8,20 +8,22 @@ class FirebaseClient {
   }
 
 
-
-  // CREATE: Add a new record to the collection
-  async create(data) {
-    try {
-      // Generate a unique ID (you can replace this with your custom ID generator)
-      const id = data.id|| generateUniqueId();
-      data.id = id; // Ensure data has the generated id
-      const newRecordRef = this.db.child(id); // Use the generated ID as the key
-      await newRecordRef.set(data); // Set the data at the generated ID
-      return { id, data }; // Return the id and data
-    } catch (error) {
-      throw new Error(`Error creating record: ${error.message}`);
+    // LIST: Get all records in the collection
+    async getAll() {
+      try {
+        const snapshot = await this.db.once('value'); // Get all records
+        if (!snapshot.exists()) {
+          // throw new Error('No records found');
+          return [];
+        }
+    
+        const records = snapshot.val(); // Get the full object with IDs as keys
+        return Object.values(records); // Return just the objects, not the keys
+      } catch (error) {
+      //   throw new Error(`Error listing records: ${error.message}`);
+      return [];
+      }
     }
-  }
 
   // READ: Get a record by ID
   async getOne(id) {
@@ -38,6 +40,20 @@ class FirebaseClient {
     }
   }
 
+    // CREATE: Add a new record to the collection
+    async create(data) {
+      try {
+        // Generate a unique ID (you can replace this with your custom ID generator)
+        const id = data.id|| generateUniqueId();
+        data.id = id; // Ensure data has the generated id
+        const newRecordRef = this.db.child(id); // Use the generated ID as the key
+        await newRecordRef.set(data); // Set the data at the generated ID
+        return { id, data }; // Return the id and data
+      } catch (error) {
+        throw new Error(`Error creating record: ${error.message}`);
+      }
+    }
+
   // UPDATE: Update an existing record by ID
   async update(id, data) {
     try {
@@ -49,6 +65,7 @@ class FirebaseClient {
     }
   }
 
+  // DELETE: Delete a record by ID
 
 async delete(id){
     try {
@@ -61,24 +78,8 @@ async delete(id){
 }
 
 
-  // DELETE: Delete a record by ID
 
-  // LIST: Get all records in the collection
-  async getAll() {
-    try {
-      const snapshot = await this.db.once('value'); // Get all records
-      if (!snapshot.exists()) {
-        // throw new Error('No records found');
-        return [];
-      }
-  
-      const records = snapshot.val(); // Get the full object with IDs as keys
-      return Object.values(records); // Return just the objects, not the keys
-    } catch (error) {
-    //   throw new Error(`Error listing records: ${error.message}`);
-    return [];
-    }
-  }
+
   }
 
 

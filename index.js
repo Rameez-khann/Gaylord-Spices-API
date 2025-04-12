@@ -1,8 +1,6 @@
 const express = require('express');
 const serverless = require('serverless-http');
-const Search = require('./js/search');
 const cors = require('cors');
-const { Recipes } = require('./js/recipes');
 
 const app = express();
 
@@ -15,42 +13,10 @@ app.use(cors({
 
 app.use(express.json());
 
-const recipesClient = new Recipes();
-const search = new Search();
-
-app.post('/recipes/search', async (req, res) => {
-  const searchTerm = req.body?.searchTerm;
-  if (!searchTerm) return res.status(404).json({ message: "menu not found" });
-  const apiResults = await search.apiSearch(searchTerm);
-  res.status(200).json(apiResults);
+app.get('/', async (req, res) => {
 });
 
-app.get('/recipes', async (req, res) => {
-  const menuItems = await recipesClient.getAll();
-  res.json(menuItems);
-});
 
-app.get('/recipes/:id', async (req, res) => {
-  const item = await recipesClient.getOne(req.params.id);
-  if (!item) return res.status(404).json({ message: 'Item not found' });
-  res.json(item);
-});
-
-app.post('/recipes', async (req, res) => {
-  const save = await recipesClient.create(req.body);
-  res.status(200).json(save);
-});
-
-app.put('/recipes/:id', async (req, res) => {
-  const updated = await recipesClient.update(req.params.id, req.body);
-  if (!updated) return res.status(404).json({ message: 'Item not found' });
-  res.json(updated);
-});
-
-app.delete('/recipes/:id', async (req, res) => {
-  const removed = await recipesClient.delete(req.params.id);
-  res.status(200).json(removed);
-});
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {
