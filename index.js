@@ -21,6 +21,18 @@ app.get('/recipes', async (req, res) => {
   res.status(200).send(recipes)
 });
 
+app.get('/recipes/:id', async (req, res) => {
+  const item = await recipesClient.getOne(req.params.id);
+  if (!item) return res.status(404).json({ message: 'Item not found' });
+  res.json(item);
+});
+
+app.post('/recipes', async (req, res) => {
+  const save = await recipesClient.create(req.body);
+  res.status(200).json(save);
+});
+
+
 
 
 // For local development
