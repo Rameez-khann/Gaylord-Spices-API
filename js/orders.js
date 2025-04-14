@@ -1,7 +1,7 @@
 const FirebaseClient = require("../firebase/firebase-client");
 
-class MenuItems {
-    firebaseClient = new FirebaseClient('menu-items');
+class Orders {
+    firebaseClient = new FirebaseClient('orders');
 
     getAll(){
         return this.firebaseClient.getAll();
@@ -12,6 +12,7 @@ class MenuItems {
     }
 
     create(data){
+        data.status = "pending";
         return this.firebaseClient.create(data);
     }
 
@@ -25,5 +26,5 @@ class MenuItems {
 }
 
 module.exports = {
-    MenuItems
+    Orders
 }
