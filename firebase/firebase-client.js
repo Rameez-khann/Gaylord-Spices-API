@@ -50,9 +50,11 @@ class FirebaseClient {
         // Generate a unique ID (you can replace this with your custom ID generator)
         const id = data.id|| generateUniqueId();
         data.id = id; // Ensure data has the generated id
+        data.createdAt = new Date().toISOString();
         const newRecordRef = this.db.child(id); // Use the generated ID as the key
         await newRecordRef.set(data); // Set the data at the generated ID
         return { id, data }; // Return the id and data
+
       } catch (error) {
         throw new Error(`Error creating record: ${error.message}`);
       }

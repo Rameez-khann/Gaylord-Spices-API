@@ -7,6 +7,20 @@ class Orders {
         return this.firebaseClient.getAll();
     }
 
+async getGroupedOrders(){
+    const orders = await this.getAll();
+    const pendingOrders = orders.filter(o=> o.status ==='pending');
+    const deliveredOrders = orders.filter(o=> o.status ==='delivered');
+    return {pendingOrders,deliveredOrders}
+}
+
+
+async markAsDelivered(id){
+    const update = await this.update(id,{status:'delivered'});
+    return update;
+}
+
+
     getOne(id){
         return this.firebaseClient.getOne(id);
     }

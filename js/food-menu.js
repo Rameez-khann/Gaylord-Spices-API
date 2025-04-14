@@ -22,6 +22,19 @@ class FoodMenu {
     delete(id){
         return this.firebaseClient.delete(id);
     }
+
+    async getFiltered() {
+        const items = await this.getAll();
+    
+        // Shuffle the items array
+        const shuffled = items.sort(() => 0.5 - Math.random());
+    
+        // Pick first 20 items from shuffled array
+        const selected = shuffled.slice(0, 20);
+    
+        return selected;
+    }
+    
 }
 
 module.exports = {

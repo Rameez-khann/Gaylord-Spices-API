@@ -12,6 +12,7 @@ const foodMenu = new FoodMenu();
 const searchClient = new Search();
 const orders = new Orders();
 
+
 // Apply CORS middleware before other middleware
 app.use(cors({
   origin: '*',
@@ -40,6 +41,12 @@ app.get('/menu/:id', async (req, res) => {
   const item = await foodMenu.getOne(req.params.id);
   if (!item) return res.status(404).json({ message: 'Item not found' });
   res.json(item);
+});
+
+app.get('/menu/filtered/items', async (req, res) => {
+  const recipes = await  foodMenu.getFiltered();
+
+  res.status(200).send(recipes)
 });
 
 app.post('/menu', async (req, res) => {
@@ -74,6 +81,20 @@ app.post('/authentication/login', async (req, res) => {
   
 });
 
+
+app.get('/orders/grouped', async (req, res) => {
+  const item = await orders.getGroupedOrders();
+  if (!item) return res.status(404).json({ message: 'Item not found' });
+  res.json(item);
+});
+
+app.get('/orders/mark-as-delivered/:id', async (req, res) => {
+  const id = req.params.id;
+  if(!id) res.status(404).json({ message: 'Item not found' })
+ const marked = await orders.markAsDelivered(id);
+  res.status(200).json({message:"Order Processed Successfully"});
+
+});
 
 
 

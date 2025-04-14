@@ -3,7 +3,7 @@ const FirebaseClient = require("../firebase/firebase-client");
 class Filter {
   collection = "filtered-recipes";
   filterId = "filtered-recipes";
-  dbClient = new FirebaseClient(this.collection);
+  dbClient = new FirebaseClient(this.collection)
 
   async getFilteredRecipes() {
     const item = await this.get(this.filterId);
@@ -12,7 +12,7 @@ class Filter {
 
 
   async get(id) {
-    return this.dbClient.get(id);
+    return this.dbClient.getAll(id);
   }
 
 
@@ -26,4 +26,9 @@ class Filter {
       return null;
     }
   }
+}
+
+
+module.exports={
+  Filter
 }

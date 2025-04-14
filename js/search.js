@@ -1,8 +1,57 @@
 const { generateUniqueId } = require("victor-dev-toolbox");
+const { FoodMenu } = require("./food-menu");
+const { searchObjectsByFields } = require("victor-dev-toolbox");
+const { getFieldValuesFromArray } = require("victor-dev-toolbox");
+const { Filter } = require("./Filter");
 
 class Search {
+foodMenu = new FoodMenu();
+filter = new Filter();
     async findRecipes(searchTerm){
-        return this.getRecipesFromMealDb(searchTerm);
+        // return this.getRecipesFromMealDb(searchTerm);
+        // return this.apiSearch(searchTerm);
+        return this.searchMenuItems(searchTerm)
+    }
+
+
+    async searchMenuItems(searchTerm){
+      const menuItems = await this.foodMenu.getAll();
+      const searchFields = ['strInstructions', 'strCategory', 'strArea', 'strMeal']
+      const searchResults = searchObjectsByFields(menuItems,searchFields,searchTerm);
+      return searchResults;
+
+    }
+
+
+    async apiSearch(searchTerm) {
+      const endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(searchTerm)}`;
+  
+      const searchFields = ['strInstructions', 'strCategory', 'strArea', 'strMeal']
+      const itemsInDB = await this.foodMenu.getAll();
+      const searchResultsFromDB = searchObjectsByFields(itemsInDB,searchFields,searchTerm)
+      const idMealsInDb = getFieldValuesFromArray('idMeal', itemsInDB);
+      const deletedIdMeals = await this.filter.getFilteredRecipes();
+      const existingIdMeals = idMealsInDb.concat(deletedIdMeals);
+
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    
+        const data = await response.json();
+    
+        // data.meals will be null if nothing is found
+        const filteredFromAPI =( data.meals || []).filter(i=> !existingIdMeals.includes(i.idMeal));
+        
+        const responseData = (await this.assignIdstoApiResults(filteredFromAPI)).concat(searchResultsFromDB);
+        console.log({responseData});
+        
+        return responseData;
+
+      } catch (error) {
+        throw new Error(`Error fetching meals: ${error.message}`);
+      }
     }
     
     
@@ -20,7 +69,7 @@ class Search {
         
             const data = await response.json();
             
-        return this.assignPricesAndIds(data.meals)
+        // return this.assignPricesAndIds(data.meals)
             // data.meals will be null if nothing is found
             // const filteredFromAPI =( data.meals || []).filter(i=> !existingIdMeals.includes(i.idMeal));
             // return (await this.assignIdstoApiResults(filteredFromAPI)).concat(searchResultsFromDB);
@@ -30,7 +79,21 @@ class Search {
     }
 
 
-    async assignPricesAndIds(results){
+    // async assignPricesAndIds(results){
+    //   const modifiedResults =[];
+    //   results.forEach(result=>{
+    //     const id = generateUniqueId();
+    //     result.id = id;
+  
+    //     const price = this.estimatePrice(result);
+    //     result.price = price;
+  
+    //   // this.foodMenu.create(result);
+    //   modifiedResults.push(result);
+    //   })
+    //   return modifiedResults;
+    // }
+    async assignIdstoApiResults(results){
       const modifiedResults =[];
       results.forEach(result=>{
         const id = generateUniqueId();
@@ -39,7 +102,8 @@ class Search {
         const price = this.estimatePrice(result);
         result.price = price;
   
-      // this.menuClient.create(result);
+      this.foodMenu.create(result);
+      result.appended = "APPENDED"
       modifiedResults.push(result);
       })
       return modifiedResults;
