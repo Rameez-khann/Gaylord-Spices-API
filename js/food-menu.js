@@ -1,6 +1,6 @@
 const FirebaseClient = require("../firebase/firebase-client");
 
-class Recipes {
+class FoodMenu {
     firebaseClient = new FirebaseClient('recipes');
 
     getAll(){
@@ -25,5 +25,5 @@ class Recipes {
 }
 
 module.exports = {
-    Recipes
+    FoodMenu
 }
