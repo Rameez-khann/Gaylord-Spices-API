@@ -4,6 +4,7 @@ const cors = require('cors');
 const { Search } = require('./js/search');
 const { FoodMenu } = require('./js/food-menu');
 const { Orders } = require('./js/orders');
+const { Authentication } = require('./js/authentication');
 
 const app = express();
 
@@ -62,6 +63,14 @@ app.post('/menu/order', async (req, res) => {
   const order = req.body;
   const savePOrder = await orders.create(order)
   res.status(200).json(savePOrder);
+  
+});
+
+app.post('/authentication/login', async (req, res) => {  
+  const auth = new Authentication();
+  const body = req.body;
+  const login = await auth.login(body)
+  res.status(200).json(login);
   
 });
 
