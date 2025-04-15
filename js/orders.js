@@ -12,7 +12,6 @@ async getGroupedOrders(){
     const orders = await this.getAll();
     const pendingOrders = orders.filter(o=> o.status ==='pending');
     const deliveredOrders = orders.filter(o=> o.status ==='delivered');
-    this.firebaseClient.deleteCollection()
     return {pendingOrders,deliveredOrders}
 }
 
