@@ -8,8 +8,6 @@ const  user = {
 class Authentication {
 
     async login(data){
-        console.log({data});
-        console.log({user});
         
         
         const username = data.username;

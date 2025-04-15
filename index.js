@@ -24,7 +24,6 @@ app.use(express.json());
 // Requests
 
 app.post('/menu/search', async (req, res) => {  
-  console.log(req.body);
   const searchTerm = req.body?.searchTerm;
   const searchResults = await searchClient.findRecipes(searchTerm);
   res.status(200).json(searchResults);
@@ -102,7 +101,6 @@ app.get('/orders/mark-as-delivered/:id', async (req, res) => {
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3030;
   app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
   });
 }
 

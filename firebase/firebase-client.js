@@ -84,6 +84,11 @@ async delete(id){
 }
 
 
+async deleteCollection(){
+  const ref = this.db.remove();
+}
+
+
 
 
   }

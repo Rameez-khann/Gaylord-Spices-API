@@ -9,8 +9,8 @@ foodMenu = new FoodMenu();
 filter = new Filter();
     async findRecipes(searchTerm){
         // return this.getRecipesFromMealDb(searchTerm);
-        // return this.apiSearch(searchTerm);
-        return this.searchMenuItems(searchTerm)
+        return this.apiSearch(searchTerm);
+        // return this.searchMenuItems(searchTerm)
     }
 
 
@@ -45,7 +45,6 @@ filter = new Filter();
         const filteredFromAPI =( data.meals || []).filter(i=> !existingIdMeals.includes(i.idMeal));
         
         const responseData = (await this.assignIdstoApiResults(filteredFromAPI)).concat(searchResultsFromDB);
-        console.log({responseData});
         
         return responseData;
 
@@ -56,7 +55,6 @@ filter = new Filter();
     
     
     async getRecipesFromMealDb(searchTerm) {
-        console.log({searchTerm});
         
         const endpoint = `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(searchTerm)}`;
         // const searchFields = ['strInstructions', 'strCategory', 'strArea', 'strMeal']
