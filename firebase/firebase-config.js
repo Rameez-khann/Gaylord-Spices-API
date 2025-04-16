@@ -2,17 +2,21 @@
  * NOTE:
  * All code in this section was provided by Firebase, either through their official documentation or SDK-generated templates
  */
-
+require('dotenv').config();
 const admin = require('firebase-admin');
+
+
+
+
 // Firebase Configuration 
 const firebaseConfig = {
-    apiKey: "AIzaSyDfNRk2LqHdPmKXW3lYgnBBWvy0haPWQQk",
-    authDomain: "gaylord-spices-be80a.firebaseapp.com",
-    projectId: "gaylord-spices-be80a",
-    storageBucket: "gaylord-spices-be80a.firebasestorage.app",
-    messagingSenderId: "1084612105810",
-    appId: "1:1084612105810:web:0a4b3142d1bb51cfbcf18b",
-    measurementId: "G-06WC2EJLCG"
+    apiKey: process.env.API_KEY,
+    authDomain: process.env.AUTH_DOMAIN,
+    projectId: process.env.PROJECT_ID,
+    storageBucket: process.env.STORAGE_BUCKET,
+    messagingSenderId: process.env.MESSAGING_SENDER_ID,
+    appId:process.env.APP_ID,
+    measurementId:process.env.MEASUREMENT_ID
   };
 
 //  Firebase Service Account
