@@ -36,8 +36,7 @@ const firebaseConfig = {
 
   
   // Initialize Firebase Admin SDK if not already initialized
-  const databaseURL = 'https://gaylord-spices-be80a-default-rtdb.firebaseio.com/';
-
+ 
 if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),

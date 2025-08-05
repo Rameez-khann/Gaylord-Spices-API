@@ -9,7 +9,7 @@ class Orders {
 
 async getGroupedOrders(){
 
-    const orders = await this.getAll();
+    const orders = await this.getAll();           
     const pendingOrders = orders.filter(o=> o.status ==='pending');
     const deliveredOrders = orders.filter(o=> o.status ==='delivered');
     return {pendingOrders,deliveredOrders}
@@ -19,6 +19,17 @@ async getGroupedOrders(){
 async markAsDelivered(id){
     const update = await this.update(id,{status:'delivered'});
     return update;
+}
+
+async clearDeliveredOrders(){
+    const orders = await this.getAll();           
+    const pendingOrders = orders.filter(o=> o.status ==='delivered');
+    const promises = [];
+    pendingOrders.forEach(order=>{
+        promises.push(this.delete(order.id));
+    })
+    const cleared = Promise.all(promises);
+    return true;
 }
 
 

@@ -95,6 +95,13 @@ app.get('/orders/mark-as-delivered/:id', async (req, res) => {
 
 });
 
+app.get('/orders/clear-delivered-orders', async (req, res) => {
+
+ const marked = await orders.clearDeliveredOrders();
+  res.status(200).json({message:"Orders Cleared Successfully"});
+
+});
+
 
 
 // For local development
